@@ -1,0 +1,1 @@
+# Init do módulo simulador
