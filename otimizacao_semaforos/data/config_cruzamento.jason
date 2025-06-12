@@ -1,6 +1,0 @@
-{
-  "tempo_verde_padrao": 5,
-  "taxa_chegada": [2, 2],  # Veículos/segundo em Sem1 e Sem2
-  "taxa_saida": 3,         # Veículos/segundo processados no verde
-  "custo_troca": 10        # Custo para trocar o semáforo
-}
