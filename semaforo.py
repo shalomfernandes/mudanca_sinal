@@ -6,6 +6,7 @@ class Semaforo:
         self.tempo_verde = self.tempo_verde_min
         self.tempo_restante = self.tempo_verde
         self.filas = {'VERTICAL': 0, 'HORIZONTAL': 0}
+        self.rodadas = {'VERTICAL': 0, 'HORIZONTAL': 0}  # Contador de rodadas para cada direção
 
     def atualizar(self, fila_v, fila_h):
         self.filas['VERTICAL'] = fila_v
@@ -19,16 +20,32 @@ class Semaforo:
         fila_v = self.filas['VERTICAL']
         fila_h = self.filas['HORIZONTAL']
 
-        # Decide qual sentido priorizar com base na maior fila
-        if fila_v == 0 and fila_h == 0:
-            # Nenhuma fila, mantém o estado atual com tempo mínimo
-            self.tempo_verde = self.tempo_verde_min
-        elif fila_v >= fila_h:
-            self.estado = 'VERTICAL'
-            self.tempo_verde = self.calcular_tempo(fila_v)
+        # Incrementa o contador da direção atual
+        self.rodadas[self.estado] += 1
+
+        # Verifica a direção oposta
+        outra_direcao = 'HORIZONTAL' if self.estado == 'VERTICAL' else 'VERTICAL'
+        fila_atual = self.filas[self.estado]
+        fila_oposta = self.filas[outra_direcao]
+
+        # Se não houver carros na direção oposta, mantém o sinal atual
+        if fila_oposta == 0:
+            self.tempo_verde = self.calcular_tempo(fila_atual)
         else:
-            self.estado = 'HORIZONTAL'
-            self.tempo_verde = self.calcular_tempo(fila_h)
+            # Se houver carros na direção oposta, verifica as condições de troca
+            if self.rodadas[self.estado] >= 2:
+                # Força a troca após 2 rodadas
+                self.estado = outra_direcao
+                self.rodadas[self.estado] = 0
+                self.tempo_verde = self.calcular_tempo(fila_oposta)
+            elif fila_oposta > fila_atual * 1.5:  # 50% mais carros na direção oposta
+                # Troca se a direção oposta tiver significativamente mais carros
+                self.estado = outra_direcao
+                self.rodadas[self.estado] = 0
+                self.tempo_verde = self.calcular_tempo(fila_oposta)
+            else:
+                # Mantém o sinal atual
+                self.tempo_verde = self.calcular_tempo(fila_atual)
 
         self.tempo_restante = self.tempo_verde
 

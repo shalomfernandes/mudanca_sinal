@@ -1,7 +1,7 @@
 import pygame
-from simulador.semaforo import Semaforo
-from simulador.carro import Carro
-from simulador.sensor import Sensor
+from semaforo import Semaforo
+from carro import Carro
+from sensor import Sensor
 
 def executar_simulacao():
     pygame.init()
@@ -59,8 +59,8 @@ def executar_simulacao():
         tempo_v = semaforo.tempo_para_mostrar('VERTICAL')
         tempo_h = semaforo.tempo_para_mostrar('HORIZONTAL')
 
-        texto_v = fonte.render(f"V: {tempo_v}s | Fila: {fila_v}", True, (0, 0, 0))
-        texto_h = fonte.render(f"H: {tempo_h}s | Fila: {fila_h}", True, (0, 0, 0))
+        texto_v = fonte.render(f"V: {tempo_v}s | Fila: {fila_v} | Rodadas: {semaforo.rodadas['VERTICAL']}", True, (0, 0, 0))
+        texto_h = fonte.render(f"H: {tempo_h}s | Fila: {fila_h} | Rodadas: {semaforo.rodadas['HORIZONTAL']}", True, (0, 0, 0))
 
         tela.blit(texto_v, (10, 10))
         tela.blit(texto_h, (10, 40))
